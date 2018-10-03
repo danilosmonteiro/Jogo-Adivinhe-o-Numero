@@ -22,7 +22,7 @@
 
       <div class="starter-template">
         <h1>Acerte o Número</h1>
-        <p class="lead">Digite um número de 1 à 9.999 (Você tem 10 tentativas para acertar).</p>
+        <p class="lead">Digite um número de 1 à 10.000 (Você tem 10 tentativas para acertar).</p>
       </div>
 <div align="center">
 <div class="form">
@@ -42,7 +42,7 @@
 <div align="center">
   <script>
     // Seu JavaScript vai aqui
-    var numeroAleatorio = Math.floor(Math.random() * 10) + 1;
+    var numeroAleatorio = Math.floor(Math.random() * 10000) + 1;
     var palpites = document.querySelector('.palpites');
     var ultimoResultado = document.querySelector('.ultimoResultado');
     var baixoOuAlto = document.querySelector('.baixoOuAlto');
@@ -121,7 +121,7 @@
       campoPalpite.value = '';
       campoPalpite.focus();
       ultimoResultado.style.backgroundColor = 'white';
-      numeroAleatorio = Math.floor(Math.random() * 10) + 1;
+      numeroAleatorio = Math.floor(Math.random() * 10000) + 1;
     }
 
     function cancelarTentativas() {
