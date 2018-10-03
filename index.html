@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- <link rel="icon" href="../../../../favicon.ico"> -->
+
+    <title>Adivinhe o Número</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="starter-template.css" rel="stylesheet">
+  </head>
+
+  <body>
+
+    <main role="main" class="container">
+
+      <div class="starter-template">
+        <h1>Acerte o Número</h1>
+        <p class="lead">Digite um número de 1 à 9.999 (Você tem 10 tentativas para acertar).</p>
+      </div>
+<div align="center">
+<div class="form">
+  <!-- <label for="campoPalpite">Digite seu palpite: </label> -->
+  <input type="text" id="campoPalpite" class="campoPalpite form-control input-md">
+</br>
+  <input type="button" id="botaolimpa" value="Limpar" onClick="limpa()" class="btn btn-basic">
+  <input type="submit" value="Enviar palpite" class="envioPalpite btn btn-primary">
+</div>
+
+<div class="resultadoParas">
+  <p class="palpites"></p>
+  <p class="ultimoResultado"></p>
+  <p class="baixoOuAlto"></p>
+</div>
+</div>
+<div align="center">
+  <script>
+    // Seu JavaScript vai aqui
+    var numeroAleatorio = Math.floor(Math.random() * 10) + 1;
+    var palpites = document.querySelector('.palpites');
+    var ultimoResultado = document.querySelector('.ultimoResultado');
+    var baixoOuAlto = document.querySelector('.baixoOuAlto');
+    var envioPalpite = document.querySelector('.envioPalpite');
+    var campoPalpite = document.querySelector('.campoPalpite');
+    var contagemPalpites = 1;
+    var botaoReinicio;
+    campoPalpite.focus();
+    function conferirPalpite() {
+      var palpiteUsuario = Number(campoPalpite.value);
+      if(contagemPalpites === 1) {
+        palpites.textContent = 'Palpites: ';
+
+        botaoCancelarTentativas = document.createElement('button');
+        botaoCancelarTentativas.textContent = 'Cancelar';
+        document.body.appendChild(botaoCancelarTentativas);
+        botaoCancelarTentativas.addEventListener('click', cancelarTentativas);
+
+        botaoLimparTentativas = document.createElement('button');
+        botaoLimparTentativas.textContent = 'Limpar Tentativas';
+        document.body.appendChild(botaoLimparTentativas);
+        botaoLimparTentativas.addEventListener('click', limparTentativas);      
+
+      }
+      palpites.textContent += palpiteUsuario + ' ';
+      if(palpiteUsuario === numeroAleatorio) {
+        ultimoResultado.textContent = 'Parabéns! Você acertou! O NÚMERO SORTEADO FOI: ' + numeroAleatorio;
+        ultimoResultado.style.backgroundColor = 'green';
+        baixoOuAlto.textContent = '';
+        botaoCancelarTentativas.parentNode.removeChild(botaoCancelarTentativas);
+        botaoLimparTentativas.parentNode.removeChild(botaoLimparTentativas);
+        window.alert("Parabéns! Você acertou! O NÚMERO SORTEADO FOI: " + numeroAleatorio);        
+        window.navigator.vibrate(2000);
+
+        configFimDeJogo();
+      } else if(contagemPalpites === 10) {
+        ultimoResultado.textContent = 'Você Perdeu! O NÚMERO SORTEADO FOI: ' + numeroAleatorio;
+        baixoOuAlto.textContent = '';
+        botaoCancelarTentativas.parentNode.removeChild(botaoCancelarTentativas);
+        botaoLimparTentativas.parentNode.removeChild(botaoLimparTentativas);
+
+        configFimDeJogo();
+      } else {
+        ultimoResultado.textContent = 'Errado!';
+        ultimoResultado.style.backgroundColor = 'red';
+        if(palpiteUsuario < numeroAleatorio) {
+          baixoOuAlto.textContent = 'Seu palpite foi muito baixo!';
+        } else if(palpiteUsuario > numeroAleatorio) {
+          baixoOuAlto.textContent = 'Seu palpite foi muito alto!';
+        }
+      }
+      contagemPalpites++;
+      campoPalpite.value = '';
+      campoPalpite.focus();
+    }
+    envioPalpite.addEventListener('click', conferirPalpite);
+    function configFimDeJogo() {
+      campoPalpite.disabled = true;
+      envioPalpite.disabled = true;
+      botaolimpa.disabled = true;
+      botaoReinicio = document.createElement('button');
+      botaoReinicio.textContent = 'Iniciar novo jogo';
+      document.body.appendChild(botaoReinicio);
+      botaoReinicio.addEventListener('click', reiniciarJogo);
+    }
+    function reiniciarJogo() {
+      contagemPalpites = 1;
+      var reiniciarParas = document.querySelectorAll('.resultadoParas p');
+      for(var i = 0 ; i < reiniciarParas.length ; i++) {
+        reiniciarParas[i].textContent = '';
+      }
+      botaoReinicio.parentNode.removeChild(botaoReinicio);
+      campoPalpite.disabled = false;
+      envioPalpite.disabled = false;
+      botaolimpa.disabled = false;
+      campoPalpite.value = '';
+      campoPalpite.focus();
+      ultimoResultado.style.backgroundColor = 'white';
+      numeroAleatorio = Math.floor(Math.random() * 10) + 1;
+    }
+
+    function cancelarTentativas() {
+      contagemPalpites = 1;
+      var reiniciarParas = document.querySelectorAll('.resultadoParas p');
+      for(var i = 0 ; i < reiniciarParas.length ; i++) {
+        reiniciarParas[i].textContent = '';
+      }
+      botaoCancelarTentativas.parentNode.removeChild(botaoCancelarTentativas);
+      botaoLimparTentativas.parentNode.removeChild(botaoLimparTentativas);
+
+      campoPalpite.disabled = true;
+      envioPalpite.disabled = true;
+      botaolimpa.disabled  = true;
+      // campoPalpite.value = '';
+      // campoPalpite.focus();
+      ultimoResultado.textContent = 'O NÚMERO SORTEADO FOI: ' + numeroAleatorio;
+      ultimoResultado.style.backgroundColor = 'blue';
+      // numeroAleatorio = Math.floor(Math.random() * 100) + 1;
+      botaoReinicio = document.createElement('button');
+      botaoReinicio.textContent = 'Iniciar novo jogo';
+      document.body.appendChild(botaoReinicio);
+      botaoReinicio.addEventListener('click', reiniciarJogo);
+
+    }
+
+    function limpa() {
+      if(document.getElementById('campoPalpite').value!="") {
+        document.getElementById('campoPalpite').value="";
+      }
+    }
+
+    botaoLimparTentativas.addEventListener('click', conferirPalpite);
+    function limparTentativas(){
+      contagemPalpites = 1;
+      var reiniciarParas = document.querySelectorAll('.palpites');
+      for(var i = 0 ; i < reiniciarParas.length ; i++) {
+        reiniciarParas[i].textContent = '';
+      }
+      // palpites.textContent = 'Palpites: ';
+
+      // ultimoResultado.style.backgroundColor = 'white';    
+      botaoLimparTentativas.parentNode.removeChild(botaoLimparTentativas);
+      botaoCancelarTentativas.parentNode.removeChild(botaoCancelarTentativas);
+
+    }
+    
+  </script>
+  </div>    
+
+
+    </main><!-- /.container -->
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+    <!-- <script src="../../assets/js/vendor/popper.min.js"></script> -->
+    <script src="js/bootstrap.min.js"></script>
+
+  </body>
+</html>
